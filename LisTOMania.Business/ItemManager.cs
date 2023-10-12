@@ -20,19 +20,17 @@ namespace LisTOMania.Business
 
         public async Task Edit(ItemDto item)
         {
-            if (item.IsRepeatable && item.IsDone)
-            {
-                item.IsDone = false;
-                if (!string.IsNullOrWhiteSpace(item.AdditionalText))
-                {
-                    item.AdditionalText += "\n";
-                }
-                item.AdditionalText += $"Repeatable item was marked done at: {DateTime.Now.ToString("dd.MM.yyyy HH:mm")}";
-            }
-
             if (item.IsDone)
             {
                 item.DoneAt = DateTime.Now;
+                if (item.IsRepeatable)
+                {
+                    if (!string.IsNullOrWhiteSpace(item.AdditionalText))
+                    {
+                        item.AdditionalText += "\n";
+                    }
+                    item.AdditionalText += $"Repeatable item was marked done at: {DateTime.Now.ToString("dd.MM.yyyy HH:mm")}";
+                }
             }
             await this.dataAccess.Edit(item);
         }

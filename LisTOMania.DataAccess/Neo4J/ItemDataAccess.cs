@@ -106,5 +106,14 @@ namespace LisTOMania.DataAccess.Neo4J
                 .DetachDelete("i")
                 .ExecuteWithoutResultsAsync();
         }
+
+        public async Task ResetRepeatableItems()
+        {
+            await this.graphClient.Cypher
+                .Match("(i:Item)")
+                .Where((N4JItem i) => i.IsRepeatable == true)
+                .Set("i.IsDone = false")
+                .ExecuteWithoutResultsAsync();
+        }
     }
 }

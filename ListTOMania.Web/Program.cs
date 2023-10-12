@@ -7,7 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using Quartz.Impl;
+using Quartz.Spi;
+using Quartz;
 using Serilog;
+using System.Xml.Schema;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,20 @@ builder.Services.AddTransient<ITagManager, TagManager>();
 builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IRechteManager, RechteManager>();
 builder.Services.AddTransient<IHealthCheck, Neo4jHealthCheck>();
+
+builder.Services.AddTransient<RepeatableItemResetter>(); // Replace YourService with the actual name of your service class.
+builder.Services.AddQuartz(q =>
+{
+    q.ScheduleJob<RepeatableItemResetter>(t =>
+    {
+        t.WithCronSchedule("0 0 2 * * ?");
+    });
+});
+
+builder.Services.AddQuartzHostedService(opt =>
+{
+    opt.WaitForJobsToComplete = true;
+});
 
 var logger = new LoggerConfiguration()
     .WriteTo.Debug()

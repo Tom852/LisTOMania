@@ -12,5 +12,7 @@ namespace LisTOMania.Common.Interfaces.DataLayer
         Task<ItemDto?> Get(Guid itemId);
 
         Task Remove(Guid itemId);
+
+        Task ResetRepeatableItems();
     }
 }
