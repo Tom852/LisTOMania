@@ -114,11 +114,12 @@
     {
         @foreach (var item in Model.Data?.Items ?? Enumerable.Empty<ItemDto>())
         {
-            <div class="grid-container p-1 hover-effect border-primary
+            <div class="grid-container p-1 hover-effect border-primary toggleByDesignationHandler
                     @(item == first ? "hover-effect-first" : "")
                     @(item == last ? "hover-effect-last" : "")
                     @(item == last && item == first ? "hover-effect-single" : "")
-                    @(item != last ? " border-bottom" : "")">
+                    @(item != last ? " border-bottom" : "")"
+         data-itemid=@item.Id>
 
                 <div class="grid-checkbox">
                     <div class="checkbox-wrapper-39 align-text-bottom align-bottom">
@@ -133,10 +134,10 @@
                     </div>
                 </div>
                 @*<div class="flexy-designation-and-tags toggleByDesignationHandler" data-itemid=@item.Id>*@
-                <div class="grid-designation fs-4 toggleByDesignationHandler" data-itemid=@item.Id>
+                <div class="grid-designation fs-4">
                     @Html.HighlightPercentages(item.Designation)
                 </div>
-                <div class="grid-tags tags toggleByDesignationHandler" data-itemid=@item.Id>
+                <div class="grid-tags tags">
                     @if (item.IsRepeatable)
                     {
                         <span>🔁 </span>
@@ -153,17 +154,17 @@
                 </div>
                 @if (item?.ContainingListDesignation != null && item?.ContainingListDesignation != Model?.Data.Designation)
                 {
-                    <div class="grid-include toggleByDesignationHandler" data-itemid=@item.Id>
+                    <div class="grid-include">
                         (-> @Html.Shorten(item.ContainingListDesignation, 20))
                     </div>
                 }
 
-                <div class="grid-prio fs-4 toggleByDesignationHandler @(item.Prio == 1 && !item.IsDone ? "glow font-weight-bold" : "")" data-itemid=@item.Id>
+                <div class="grid-prio fs-4 @(item.Prio == 1 && !item.IsDone ? "glow font-weight-bold" : "")">
                     🕰 @item.Prio
                 </div>
                 <div class="grid-controls fs-5">
-                    <a class="mr-2 @(Model.ReadDonly ? "disabledAnchor" : "")" asp-page="item/edit" asp-route-listId="@Model.Data.Id" asp-route-itemId="@item.Id"> 📝 </a>
-                    <a class="deleteHandler @(Model.ReadDonly ? "disabledAnchor" : "")" href="_self" data-itemid=@item.Id> 🗑 </a>
+                    <a class="excludedDesignationHandler mr-2 @(Model.ReadDonly ? "disabledAnchor" : "")" asp-page="item/edit" asp-route-listId="@Model.Data.Id" asp-route-itemId="@item.Id"> 📝 </a>
+                    <a class="excludedDesignationHandler deleteHandler @(Model.ReadDonly ? "disabledAnchor" : "")" href="_self" data-itemid=@item.Id> 🗑 </a>
                 </div>
             </div>
         }
@@ -246,13 +247,15 @@
                     performAjaxCall(itemId, value);
                 });
 
-                $('.toggleByDesignationHandler').click(function () {
-                    var self = $(this);
-                    var itemId = self.data("itemid");
-
-                    var checkboxTarget = $('.toggleByCheckboxHandler[data-itemid="' + itemId + '"]');
-                    var currentState = checkboxTarget.prop('checked');
-                    checkboxTarget.prop('checked', !currentState).trigger('change');
+                $('.toggleByDesignationHandler').click(function (event) {
+                    var clickedElement = $(event.target);
+                    if (!clickedElement.is('.excludedDesignationHandler')) {
+                        var self = $(this);
+                        var itemId = self.data("itemid");
+                        var checkboxTarget = $('.toggleByCheckboxHandler[data-itemid="' + itemId + '"]');
+                        var currentState = checkboxTarget.prop('checked');
+                        checkboxTarget.prop('checked', !currentState).trigger('change');
+                    }
                 });
 
                 $('.deleteHandler').click(function () {

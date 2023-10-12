@@ -126,7 +126,7 @@ a {
     align-items: center; /*vertikale v^*/
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
     .grid-container {
         display: grid;
         grid-template-columns: 75px 2fr 1fr 5rem 5rem;
@@ -155,5 +155,8 @@ a {
     }
     .grid-include {
         justify-self: start;
+    }
+    .no-pill-when-small {
+        border-radius: 10px !important;
     }
 }

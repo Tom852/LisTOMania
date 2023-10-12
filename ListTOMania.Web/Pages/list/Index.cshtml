@@ -22,7 +22,7 @@
 @foreach (var list in Model.AllLists)
 {
     <div class="container">
-        <div class="row border border-primary border-2 rounded-pill fs-4 mt-3 hover-effect align-items-center">
+        <div class="row border border-primary border-2 rounded-pill fs-4 mt-2 hover-effect align-items-center no-pill-when-small">
             <a asp-page="details" asp-route-listId="@list.Id" class="col">
                 @list.Designation
             </a>
