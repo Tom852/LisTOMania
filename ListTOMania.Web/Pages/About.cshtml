@@ -1,0 +1,31 @@
+﻿@page
+@model ListTOMania.Pages.AboutModel
+@{
+    ViewData["Title"] = "About";
+}
+
+<p>
+    LisTOMania is a webbased application to represent lists. Key features are
+    <ul>
+        <li>A list can include items from another list.</li>
+        <li>Items can contain tags.</li>
+        <li>Filter items by tag or name.</li>
+        <li>Repeatable items that auto-reset.</li>
+        <li>More Buttons. Less clicks.</li>
+        <li>Users with permissions.</li>
+    </ul>
+    LisTOMania can be used for
+    <ul>
+        <li>Todo-Lists</li>
+        <li>Shopping-Lists</li>
+        <li>Activity Ideas</li>
+        <li>Anything with lists</li>
+    </ul>
+</p>
+<p>To start, just log in (users must be created on the database) and go ahead.</p>
+
+<div class="mt-4">
+    <a asp-page="/List/Index" class="fs-3">▶ to the lists</a>
+</div>
+
+</div>

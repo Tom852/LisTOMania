@@ -1,0 +1,285 @@
+﻿@page "{listId}"
+@using LisTOMania.Common.Model
+@model ListTOMania.Web.Pages.list.GetModel
+@{
+    ViewData["Title"] = Model?.Data?.Designation;
+}
+
+
+@*<p>
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+        Controls
+    </button>
+</p>
+
+
+
+
+
+<div class="collapse" id="collapseExample">*@
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <a class="col-md-2 mb-2 fs-3" asp-page="/List/Index">⬅</a>
+        <div class="col-md-10 float-end text-end">
+            <form method="post">
+                <button asp-page-handler="MarkAllHandler" class="btn btn-info" type="submit" disabled="@Model.ReadDonly"
+                        onclick="return confirm('Are you sure to set all items as done?')">
+                    Mark All
+                </button>
+                <button asp-page-handler="UnmarkAllHandler" class="btn btn-secondary" type="submit" disabled="@Model.ReadDonly"
+                        onclick="return confirm('Are you sure to set all items as *not* done?')">
+                    Unmark All
+                </button>
+                <button asp-page-handler="ClearMarkedHandler" class="btn btn-warning type="submit" disabled="@Model.ReadDonly"
+                        onclick="return confirm('Are you sure to remove all items that are done?')">
+                    Clear Marked
+                </button>
+                <button asp-page-handler="ClearAllHandler" class="btn btn-danger" type="submit" disabled="@Model.ReadDonly"
+                        onclick="return confirm('Are you sure to clear the entire list?')">
+                    Clear List
+                </button>
+                <a class="btn btn-danger @(Model.ReadDonly ? "disabled" : "")" asp-page="delete" asp-route-listId="@Model?.Data.Id">Delete List</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.focus :input').focus();
+    });
+</script>
+
+
+<div class="container mb-2">
+    <form method="post" class="mt-3 mb-3" asp-page-handler="OnPost">
+        <div class="mb-3 input-group">
+            <input asp-for="NewItem.Designation" type="text" class="form-control" autofocus="autofocus" placeholder="Add new item" disabled="@Model.ReadDonly">
+            <input asp-for="NewItem.Prio" type="number" class="form-control" value="2" disabled="@Model.ReadDonly">
+            <input asp-for="Tags" type="text" class="form-control" placeholder="Tags" disabled="@Model.ReadDonly">
+
+
+
+            @*
+            <select class="form-control form-text" multiple id="tagSelect"
+            aria-label="multiple select"
+            asp-for="Selected_Tags"
+            asp-items="Model.Available_Tags">
+            </select>*@
+            <button type="submit" class="btn btn-primary" disabled="@Model.ReadDonly">
+                Insert
+            </button>
+        </div>
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+
+    </form>
+    <form method="post" class="mt-3 mb-3" asp-page-handler="Filter">
+        <div class="mb-3 input-group">
+
+            <input asp-for="TextFilter" type="text" class="form-control" placeholder="Filter List" id="textFilter">
+            <button type="submit" class="btn btn-success">
+                Reorder
+            </button>
+            <button type="reset" class="btn btn-warning" id="resetFilterButton">
+                Clear
+            </button>
+            <button type="submit" class="btn btn-primary">
+                Apply
+            </button>
+        </div>
+    </form>
+
+</div>
+@*</div>*@
+
+@if (Model.ReadDonly)
+{
+    <div class="text-center">
+        <p class="text-warning">You just have a read-only permission on this list. This means, you can view but not modify it. Functionality is disabled.</p>
+    </div>
+}
+
+@{
+    var first = Model.Data?.Items?.FirstOrDefault();
+    var last = Model.Data?.Items?.LastOrDefault();
+}
+
+<div class="border border-primary border-2" style="border-radius: 25px">
+
+    @if (Model.Data?.Items != null && Model.Data.Items.Any())
+    {
+        @foreach (var item in Model.Data?.Items ?? Enumerable.Empty<ItemDto>())
+        {
+            <div class="grid-container p-1 hover-effect border-primary
+                    @(item == first ? "hover-effect-first" : "")
+                    @(item == last ? "hover-effect-last" : "")
+                    @(item == last && item == first ? "hover-effect-single" : "")
+                    @(item != last ? " border-bottom" : "")">
+
+                <div class="grid-checkbox">
+                    <div class="checkbox-wrapper-39 align-text-bottom align-bottom">
+                        <label>
+                            <input type="checkbox"
+                           data-itemid=@item.Id
+                           checked=@item.IsDone
+                           class="toggleByCheckboxHandler"
+                           disabled="@Model.ReadDonly" />
+                            <span class="checkbox"> </span>
+                        </label>
+                    </div>
+                </div>
+                @*<div class="flexy-designation-and-tags toggleByDesignationHandler" data-itemid=@item.Id>*@
+                <div class="grid-designation fs-4 toggleByDesignationHandler" data-itemid=@item.Id>
+                    @Html.HighlightPercentages(item.Designation)
+                </div>
+                <div class="grid-tags tags toggleByDesignationHandler" data-itemid=@item.Id>
+                    @if (item.IsRepeatable)
+                    {
+                        <span>🔁 </span>
+
+                    }
+                    @foreach (var t in item.Tags)
+                    {
+                        <span class="tag">@t</span>
+                    }
+                    @if (item.Tags.Count() == 0)
+                    {
+                        <span class="p-1"></span>
+                    }
+                </div>
+                @if (item?.ContainingListDesignation != null && item?.ContainingListDesignation != Model?.Data.Designation)
+                {
+                    <div class="grid-include toggleByDesignationHandler" data-itemid=@item.Id>
+                        (-> @Html.Shorten(item.ContainingListDesignation, 20))
+                    </div>
+                }
+
+                <div class="grid-prio fs-4 toggleByDesignationHandler @(item.Prio == 1 && !item.IsDone ? "glow font-weight-bold" : "")" data-itemid=@item.Id>
+                    🕰 @item.Prio
+                </div>
+                <div class="grid-controls fs-5">
+                    <a class="mr-2 @(Model.ReadDonly ? "disabledAnchor" : "")" asp-page="item/edit" asp-route-listId="@Model.Data.Id" asp-route-itemId="@item.Id"> 📝 </a>
+                    <a class="deleteHandler @(Model.ReadDonly ? "disabledAnchor" : "")" href="_self" data-itemid=@item.Id> 🗑 </a>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="container text-center align-bottom">
+            <p> Die Liste enthält keine Elemente</p>
+        </div>
+    }
+
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Edit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $(".tag").click(function () {
+                event.stopPropagation();
+                var tagText = $(this).text(); // Get the text of the clicked tag
+                var currentFilterText = $("#textFilter").val(); // Get the current text in the input
+                var updatedFilterText = currentFilterText;
+                if (currentFilterText !== "") {
+                    updatedFilterText += " ";
+                }
+                updatedFilterText += tagText; // Combine current text and tag text
+
+                $("#textFilter").val(updatedFilterText); // Set the updated text in the input
+            });
+            $("#resetFilterButton").click(function () {
+                $("#textFilter").val("");
+                var currentURL = window.location.href;
+                var newURL = currentURL.split('?')[0];
+                window.location.href = newURL;
+                //location.reload()
+            });
+        });
+    </script>
+    @if (!Model.ReadDonly)
+    {
+        <script>
+            $(function () {
+                function performAjaxCall(itemId, value) {
+                    //var url = $(location).attr("href").split('?')[0].replace("details/", "") + "item/toggle/" + itemId + "?setAs=" + value;
+                    var url = window.location.origin + "/item/toggle/" + itemId + "?setAs=" + value;
+                    console.log(url)
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        error: function (xhr, error) {
+                            console.debug(xhr); console.debug(error);
+                        }
+                    });
+                }
+
+                $('.toggleByCheckboxHandler').change(function () {
+                    var self = $(this);
+                    var itemId = self.data("itemid");
+                    var value = self.prop('checked');
+                    performAjaxCall(itemId, value);
+                });
+
+                $('.toggleByDesignationHandler').click(function () {
+                    var self = $(this);
+                    var itemId = self.data("itemid");
+
+                    var checkboxTarget = $('.toggleByCheckboxHandler[data-itemid="' + itemId + '"]');
+                    var currentState = checkboxTarget.prop('checked');
+                    checkboxTarget.prop('checked', !currentState).trigger('change');
+                });
+
+                $('.deleteHandler').click(function () {
+                    event.preventDefault();
+                    if (!confirm("Are you sure to delete this item?")) {
+                        return;
+                    }
+                    var self = $(this);
+                    var itemId = self.data("itemid");
+
+                    //var url = $(location).attr("href").split('?')[0].replace("details/", "") + "item/delete/" + itemId;
+                    var url = window.location.origin + "/item/delete/" + itemId;
+                    console.log(url)
+                    $.ajax({
+                        url: url,
+                        type: 'GET', // no delete request supported
+                        success: (xhr) => {
+                            var currentURL = window.location.href;
+                            var newURL = currentURL.split('?')[0];
+                            window.location.href = newURL;
+                        },
+                        error: function (xhr, error) {
+                            console.debug(xhr); console.debug(error);
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+}

@@ -1,0 +1,74 @@
+﻿@page "{listId?}"
+@model ListTOMania.Web.Pages.list.EditModel
+@{
+    ViewData["Title"] = !Model.IsCreate ? "Edit " + Model.Data?.Designation : "Create new list";
+}
+
+<a asp-page="/List/Index">◀</a>
+
+<form method="post" class="mt-3 mb-3" asp-page-handler="OnPost">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <input type="hidden" asp-for="Data.Id" />
+
+    <div class="mb-3">
+        <label asp-for="Data.Designation" class="form-label">List Name</label>
+        <input asp-for="Data.Designation" type="text" class="form-control" placeholder="Einkaufsliste">
+        <span asp-validation-for="Data.Designation" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Selected_SAIO" class="form-label">Shows also items of...</label>
+
+        <select class="form-select"
+                multiple
+                aria-label="multiple select"
+                asp-for="Selected_SAIO"
+                asp-items="Model.Available_SAIO"
+                size="15"
+        >
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <table class="table table-striped-columns">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    @for (int j = 0; j < Model.AllRechte.Length; j++)
+                    {
+                        <th>@Model.AllRechte[j]</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @for (int userIndex = 0; userIndex < Model.AllUsers.Count; userIndex++)
+                {
+                    <tr>
+                        <td>@Model.AllUsers[userIndex].Name</td>
+                        @for (int rechtIndex = 0; rechtIndex < Model.AllRechte.Length; rechtIndex++)
+                        {
+                            <td>
+                                <input type="hidden" asp-for="@Model.RechteCheckboxen[userIndex][rechtIndex].RechtName" value="@Model.AllRechte[rechtIndex]" />
+                                <input type="hidden" asp-for="@Model.RechteCheckboxen[userIndex][rechtIndex].UserName" value="@Model.AllUsers[userIndex].Name" />
+                                <input asp-for="@Model.RechteCheckboxen[userIndex][rechtIndex].IsSelected" class="form-check-input" />
+                                <label class="form-check-label" asp-for="@Model.RechteCheckboxen[userIndex][rechtIndex].IsSelected">
+                                    @Model.AllUsers[userIndex].Name @Model.AllRechte[rechtIndex]
+                                </label>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+    <a asp-page="index" class="btn btn-primary">Cancel</a>
+    <button type="submit" class="btn btn-primary">
+        @(Model.IsCreate ? "Create" : "Update")
+    </button>
+</form>

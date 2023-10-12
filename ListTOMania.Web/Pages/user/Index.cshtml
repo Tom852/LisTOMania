@@ -1,0 +1,36 @@
+﻿@page
+@model ListTOMania.Web.Pages.user.IndexModel
+@{
+    ViewData["Title"] = "Users";
+}
+
+
+<a class="btn btn-primary" asp-page="edit">Create new User</a>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Password</th>
+            <th>Is Admin</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Name</td>
+                <td>@user.Password</td>
+                <td>@user.IsAdmin</td>
+                <td><a asp-page="edit" asp-route-userId="@user.Id">📝</a></td>
+                <td><a asp-page="delete" asp-route-userId="@user.Id">🗑</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

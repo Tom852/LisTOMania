@@ -1,0 +1,53 @@
+﻿@page
+@model ListTOMania.Web.Pages.list.IndexModel
+@{
+    ViewData["Title"] = "Übersicht";
+}
+
+<a class="btn btn-primary" asp-area="" asp-page="edit">Add new List</a>
+
+<form method="post" class="mt-3 mb-3" asp-page-handler="Filter">
+    <div class="mb-3 input-group">
+
+        <input asp-for="TextFilter" type="text" class="form-control" placeholder="Filter Lists" autofocus>
+        <button type="reset" class="btn btn-warning" id="resetFilterButton">
+            Clear
+        </button>
+        <button type="submit" class="btn btn-primary">
+            Apply
+        </button>
+    </div>
+</form>
+
+@foreach (var list in Model.AllLists)
+{
+    <div class="container">
+        <div class="row border border-primary border-2 rounded-pill fs-4 mt-3 hover-effect align-items-center">
+            <a asp-page="details" asp-route-listId="@list.Id" class="col">
+                @list.Designation
+            </a>
+            <div class="col-sm-1 col-3 text-end">
+                @list.Items.Where(i => i.IsDone).Count() / @list.Items.Count()
+            </div>
+            <div class="col-sm-1 col-3 text-center fs-5">
+                <a class="mr-2" asp-page="edit" asp-route-listId="@list.Id"> 📝 </a>
+                <a class="" asp-page="delete" asp-route-listId="@list.Id"> 🗑 </a>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $("#resetFilterButton").click(function () {
+                $("#textFilter").val("");
+                var currentURL = window.location.href;
+                var newURL = currentURL.split('?')[0];
+                window.location.href = newURL;
+            });
+        });
+    </script>
+}

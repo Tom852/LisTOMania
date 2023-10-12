@@ -1,0 +1,39 @@
+﻿@page
+@model ListTOMania.Web.Pages.user.EditModel
+@{
+    ViewData["Title"] = !Model.IsCreate ? "Edit " + Model.UserDto?.Name : "Create new user";
+
+}
+
+
+
+
+<form method="post">
+
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <input type="hidden" asp-for="UserDto.Id" />
+
+    <div class="form-group m-3">
+        <label asp-for="UserDto.Name"></label>
+        <input asp-for="UserDto.Name" class="form-control" />
+        <span asp-validation-for="UserDto.Name" class="text-danger"></span>
+
+    </div>
+    <div class="form-group m-3">
+        <label asp-for="UserDto.Password"></label>
+        <input type="password" asp-for="UserDto.Password" class="form-control" />
+        <span asp-validation-for="UserDto.Password" class="text-danger"></span>
+
+    </div>
+    <div class="form-group m-3">
+        <input type = "checkbox" asp-for="UserDto.IsAdmin" />
+        <label asp-for="UserDto.IsAdmin"></label>
+        <span asp-validation-for="UserDto.IsAdmin" class="text-danger"></span>
+
+    </div>
+    <a class="btn btn-danger" asp-page="index">Cancel</a>
+    <button class="btn btn-primary" type="submit">@(Model.IsCreate ? "Create" : "Update") User</button>
+
+</form>

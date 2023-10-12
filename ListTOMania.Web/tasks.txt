@@ -1,0 +1,22 @@
+﻿Prio [1-4] - Effort - Task
+
+[X] - 1 - 1 - Logging
+[X] - 1 - 4 - Get it to work, test all [ist ja eh so n bischen ongoing...]
+[X] - 2 - 2 - Darkmode
+[X] - 2 - 2 - Cache / Efficiency (GraphQL Connection - keep open a while? - bolt evtl nutzen?)
+
+1 Tag etwa
+[-] - 3 - 4 - Liste kann tags bekommen. alle items dieser liste haben dann auch diesen TAg
+[X] - 3 - 4 - List Overview: Filter / Suche
+[X] - 3 - 4 - Innerhalb einer Liste: Filter by Tag / Name
+
+
+[X] - 3 - 6 - Multi-Doable Item (done at: a;b;c;d;) autoresets
+[X] - 4 - 2 - User Authentication (no UI, just read it)
+[X] - 4 - 2 - User Permissions (wer kann welche liste sehen)
+[X] - 4 - 1 - Bottom line in details view entfernen.
+[X] - 4 - 3 - 2für1, 50% etc atuo formatten
+[X] - 5 - 1 - Enrich items with like additional text or so, comments.
+[X] - 5 - 1 - Done! / Undo als text im Details.cshtml updated sich nicht, wenn man auf kästli drückt.
+
+[ ] - 6 - 8 - Refine the code, overwork it, make it more beautfiul.

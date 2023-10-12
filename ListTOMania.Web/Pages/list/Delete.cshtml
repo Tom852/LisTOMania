@@ -1,0 +1,15 @@
+﻿@page "{listId}"
+@model ListTOMania.Web.Pages.list.DeleteModel
+@{
+    ViewData["Title"] = Model.Name + " löschen";
+}
+
+
+<div class="alert alert-danger">
+
+    <h5>Are you sure to delete @Model.Name</h5>
+    <form method="post">
+        <button type="submit" class="btn btn-danger">Yes</button>
+        <a class="btn btn-primary" asp-page="/List/Index">No</a>
+    </form>
+</div>

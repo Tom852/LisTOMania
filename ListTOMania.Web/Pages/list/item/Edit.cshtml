@@ -1,0 +1,52 @@
+﻿@page "/item/edit/{itemId}"
+@model ListTOMania.Web.Pages.list.item.EditModel
+@{
+    ViewData["Title"] = "Edit " + Model.Item.Designation;
+    //var listId = Model.RouteData["listId"];
+}
+
+<form method="post">
+
+    <input asp-for="Item.Id" type="hidden">
+
+    <div class="mb-3">
+        <label asp-for="Item.Designation" class="form-label">Bezeichnung</label>
+        <input asp-for="Item.Designation" type="text" class="form-control">
+        <span asp-validation-for="Item.Designation" class="text-danger form-text"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Item.Prio" class="form-label">Prio</label>
+        <input asp-for="Item.Prio" type="number" class="form-control">
+        <span asp-validation-for="Item.Prio" class="text-danger form-text"></span>
+    </div>
+
+    <div class="mb-3 form-check form-switch">
+        <label asp-for="Item.IsDone" class="form-check-label">Ist erledigt?</label>
+        <input asp-for="Item.IsDone" type="checkbox" class="form-check-input">
+    </div>
+
+    <div class="mb-3 form-check form-switch">
+        <label asp-for="Item.IsRepeatable" class="form-check-label">Ist repetable?</label>
+        <input asp-for="Item.IsRepeatable" type="checkbox" class="form-check-input">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Item.DoneAt" class="form-label">@(Model.Item.IsRepeatable ? "Zuletzt erledigt am" : "Erledigt am")</label>
+        <input asp-for="Item.DoneAt" type="datetime-local" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Tags" class="form-label">Tags</label>
+        <input asp-for="Tags" type="text" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Item.AdditionalText" class="form-label">Additional Text</label>
+        <textarea asp-for="Item.AdditionalText" class="form-control" rows="5"></textarea>
+    </div>
+    <div>
+        <a asp-page="/list/details" asp-route-listId="@Model.ListId" class="btn btn-danger">Cancel</a>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>

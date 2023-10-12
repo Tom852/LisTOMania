@@ -1,0 +1,159 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.disabledAnchor {
+    pointer-events: none;
+}
+
+.hover-effect:hover {
+    background: #6400e6;
+}
+
+.hover-effect.hover-effect-first {
+    border-radius: 25px 25px 0px 0px;
+}
+
+.hover-effect.hover-effect-last {
+    border-radius: 0px 0px 25px 25px;
+}
+
+.hover-effect.hover-effect-single {
+    border-radius: 25px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+    a:hover {
+        text-decoration: none;
+    }
+
+.tags {
+    margin: 0px;
+    padding: 0px;
+}
+
+.tag {
+    border: 1px solid #4e00b3;
+    background: #8c33ff;
+    color: black;
+    border-radius: 5px;
+    display: inline;
+    font-size: 12px;
+    padding: 2px 4px;
+}
+
+.tagSpecial {
+    border: 1px solid #097003;
+    background: #3ac232;
+    color: black;
+    border-radius: 5px;
+    display: inline;
+    font-size: 12px;
+    padding: 2px 4px;
+}
+
+.glow {
+    animation: glow 1s ease-in-out infinite alternate;
+}
+/*https://imgv3.fotor.com/images/blog-richtext-image/monochromatic-colors_2022-09-20-014700_uwbv.jpg*/
+
+@-webkit-keyframes glow {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #6f00ff, 0 0 40px #6f00ff, 0 0 50px #6f00ff, 0 0 60px #6f00ff, 0 0 70px #6f00ff;
+    }
+
+    to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #8c33ff, 0 0 50px #8c33ff, 0 0 60px #8c33ff, 0 0 70px #8c33ff, 0 0 80px #8c33ff;
+    }
+}
+
+
+.grid-checkbox {
+    grid-area: checkbox;
+}
+
+.grid-designation {
+    grid-area: designation;
+    justify-self: start;
+}
+
+.grid-tags {
+    grid-area: tags;
+    justify-self: start;
+}
+
+.grid-include {
+    grid-area: include;
+}
+
+.grid-prio {
+    grid-area: prio;
+}
+
+.grid-controls {
+    grid-area: controls;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 100px 4fr 1fr 100px 100px;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "checkbox designation include prio controls"
+        "checkbox tags include prio controls";
+    column-gap: 1px;
+    row-gap: 1px;
+    justify-items: center; /*horizontale <->*/
+    align-items: center; /*vertikale v^*/
+}
+
+@media (max-width: 800px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: 75px 2fr 1fr 5rem 5rem;
+        grid-template-rows: auto;
+        grid-template-areas:
+            "checkbox designation designation prio controls"
+            "checkbox tags tags prio controls"
+            "checkbox include include prio controls";
+        column-gap: 1px;
+        row-gap: 1px;
+    }
+    .grid-include {
+        justify-self: start;
+    }
+}
+
+@media (max-width: 600px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: 75px 1fr 4rem;
+        grid-template-rows: auto;
+        grid-template-areas:
+            "checkbox designation prio"
+            "checkbox tags controls"
+            "checkbox include controls"
+    }
+    .grid-include {
+        justify-self: start;
+    }
+}
